@@ -5,6 +5,7 @@
     android:id="@+id/register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FF333333"
     tools:context=".RegisterActivity">
 
     <EditText
@@ -16,6 +17,7 @@
         android:layout_marginEnd="32dp"
         android:hint="Username"
         android:inputType="text"
+        android:textColorHint="#A9A9A9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +31,7 @@
         android:layout_marginEnd="32dp"
         android:hint="Password"
         android:inputType="textPassword"
+        android:textColorHint="#A9A9A9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextUsername" />
@@ -42,6 +45,7 @@
         android:layout_marginEnd="32dp"
         android:hint="Confirm Password"
         android:inputType="textPassword"
+        android:textColorHint="#A9A9A9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
@@ -53,6 +57,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:backgroundTint="#006400"
         android:text="Register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,6 +70,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:backgroundTint="#006400"
         android:text="Already have an account? Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
