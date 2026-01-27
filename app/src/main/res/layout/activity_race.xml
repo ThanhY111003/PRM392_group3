@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#81D4FA">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🏆 DUCK RACE 🏆"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#01579B"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+    <View
+        android:id="@+id/finishLine"
+        android:layout_width="10dp"
+        android:layout_height="match_parent"
+        android:background="#D32F2F"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="100dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FINISH"
+        android:textColor="#D32F2F"
+        android:textStyle="bold"
+        android:rotation="90"
+        android:layout_alignEnd="@id/finishLine"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="-20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/tvTitle"
+        android:layout_marginTop="20dp"
+        android:paddingStart="10dp">
+
+        <FrameLayout android:layout_width="match_parent" android:layout_height="60dp" android:layout_marginBottom="10dp">
+            <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="#4FC3F7" android:alpha="0.3" android:layout_marginEnd="60dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:layout_gravity="center_vertical"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#0277BD"
+                android:paddingStart="10dp"/>
+
+            <SeekBar android:id="@+id/sb1" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:thumb="@android:color/transparent" android:progressDrawable="@android:color/transparent"/>
+            <ImageView android:id="@+id/iv1" android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_vertical|start"/>
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="match_parent" android:layout_height="60dp" android:layout_marginBottom="10dp">
+            <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="#4FC3F7" android:alpha="0.3" android:layout_marginEnd="60dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2"
+                android:layout_gravity="center_vertical"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#0277BD"
+                android:paddingStart="10dp"/>
+
+            <SeekBar android:id="@+id/sb2" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:thumb="@android:color/transparent" android:progressDrawable="@android:color/transparent"/>
+            <ImageView android:id="@+id/iv2" android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_vertical|start"/>
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="match_parent" android:layout_height="60dp" android:layout_marginBottom="10dp">
+            <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="#4FC3F7" android:alpha="0.3" android:layout_marginEnd="60dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:layout_gravity="center_vertical"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#0277BD"
+                android:paddingStart="10dp"/>
+
+            <SeekBar android:id="@+id/sb3" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:thumb="@android:color/transparent" android:progressDrawable="@android:color/transparent"/>
+            <ImageView android:id="@+id/iv3" android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_vertical|start"/>
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="match_parent" android:layout_height="60dp" android:layout_marginBottom="10dp">
+            <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="#4FC3F7" android:alpha="0.3" android:layout_marginEnd="60dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4"
+                android:layout_gravity="center_vertical"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#0277BD"
+                android:paddingStart="10dp"/>
+
+            <SeekBar android:id="@+id/sb4" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:thumb="@android:color/transparent" android:progressDrawable="@android:color/transparent"/>
+            <ImageView android:id="@+id/iv4" android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_vertical|start"/>
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="match_parent" android:layout_height="60dp" android:layout_marginBottom="10dp">
+            <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="#4FC3F7" android:alpha="0.3" android:layout_marginEnd="60dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:layout_gravity="center_vertical"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#0277BD"
+                android:paddingStart="10dp"/>
+
+            <SeekBar android:id="@+id/sb5" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:thumb="@android:color/transparent" android:progressDrawable="@android:color/transparent"/>
+            <ImageView android:id="@+id/iv5" android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_vertical|start"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="START RACE"
+            android:backgroundTint="#FFEB3B"
+            android:textColor="#000"
+            android:textStyle="bold"
+            android:paddingHorizontal="30dp"
+            android:layout_marginEnd="20dp"/>
+
+        <Button
+            android:id="@+id/btnReset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RESET"
+            android:backgroundTint="#FFF"
+            android:textColor="#000"
+            android:enabled="false"/>
+    </LinearLayout>
+
+</RelativeLayout>
