@@ -60,10 +60,10 @@ public class RaceActivity extends AppCompatActivity {
         // Bạn nhớ đổi tên R.drawable.xxx thành tên file ảnh thực tế của bạn
         int[] racerImageIds = {
                 R.drawable.vit1, // Ảnh cho làn 1
-                R.drawable.vit2, // Ảnh cho làn 2
-                R.drawable.vit3, // Ảnh cho làn 3
-                R.drawable.vit4, // Ảnh cho làn 4
-                R.drawable.vit5  // Ảnh cho làn 5
+                R.drawable.vit1, // Ảnh cho làn 2
+                R.drawable.vit1, // Ảnh cho làn 3
+                R.drawable.vit1, // Ảnh cho làn 4
+                R.drawable.vit1  // Ảnh cho làn 5
         };
 
         for (int i = 0; i < SO_LUONG_LAN; i++) {
