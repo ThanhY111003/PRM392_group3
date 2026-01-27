@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -26,6 +27,8 @@ public class RaceActivity extends AppCompatActivity {
     private Button btnStart, btnReset;
     private TextView tvTitle;
 
+    private ImageButton btnBack;
+
     private Handler handler = new Handler(Looper.getMainLooper());
     private Random random = new Random();
     private boolean isRacing = false;
@@ -41,12 +44,14 @@ public class RaceActivity extends AppCompatActivity {
         btnStart.setOnClickListener(v -> batDauDua());
         // Nút Reset giờ có thể bấm bất cứ lúc nào
         btnReset.setOnClickListener(v -> resetGame());
+        btnBack.setOnClickListener(v -> finish());
     }
 
     private void initViews() {
         tvTitle = findViewById(R.id.tvTitle);
         btnStart = findViewById(R.id.btnStart);
         btnReset = findViewById(R.id.btnReset);
+        btnBack = findViewById(R.id.btnBack);
 
         int[] sbIds = {R.id.sb1, R.id.sb2, R.id.sb3, R.id.sb4, R.id.sb5};
         int[] ivIds = {R.id.iv1, R.id.iv2, R.id.iv3, R.id.iv4, R.id.iv5};

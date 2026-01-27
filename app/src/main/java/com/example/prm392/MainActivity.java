@@ -1,6 +1,5 @@
 package com.example.prm392;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -61,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Xử lý nút Bắt đầu cược (Luồng 3 sẽ dùng)
         btnStartBet.setOnClickListener(v -> {
-            // Toast.makeText(this, "Chuyển sang màn hình đua xe...", Toast.LENGTH_SHORT).show();
-            // Intent intent = new Intent(MainActivity.this, RacingActivity.class);
-            // startActivity(intent);
+             Toast.makeText(this, "Chuyển sang màn hình đua xe...", Toast.LENGTH_SHORT).show();
+             Intent intent = new Intent(MainActivity.this, RaceActivity.class);
+             startActivity(intent);
         });
     }
 
