@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -13,7 +14,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Random;
 
@@ -21,25 +26,26 @@ public class RaceActivity extends AppCompatActivity {
 
     private static final int SO_LUONG_LAN = 5;
 
-    // --- CẤU HÌNH ---
+    // --- Cau hinh ---
     private static final int MAX_PROGRESS = 10000;
     private static final int DELAY_MS = 30;
-    private static final int START_OFFSET_DP = 40; // chừa khoảng nhỏ ở đầu đường đua
+    private static final int START_OFFSET_DP = 40;
+    private static final int CHEER_INTERVAL_MS = 2000;
 
     private SeekBar[] sbRacers = new SeekBar[SO_LUONG_LAN];
     private ImageView[] ivRacers = new ImageView[SO_LUONG_LAN];
     private Button btnStart, btnReset;
     private TextView tvTitle, tvBalanceInRace;
 
-    // View đặt cược
+    // View dat cuoc
     private CheckBox[] cbBets = new CheckBox[SO_LUONG_LAN];
     private EditText[] edtBets = new EditText[SO_LUONG_LAN];
 
-    // Dữ liệu người chơi & cược
+    // Du lieu nguoi choi & cuoc
     private SharedPreferences sharedPreferences;
     private String currentUsername;
     private long currentBalance;
-    private long balanceBeforeRace; // Balance before bets were deducted
+    private long balanceBeforeRace;
     private long[] betAmounts = new long[SO_LUONG_LAN];
     private int startOffsetPx;
 
@@ -47,18 +53,33 @@ public class RaceActivity extends AppCompatActivity {
     private Random random = new Random();
     private boolean isRacing = false;
     private Runnable raceRunnable;
+    private Runnable cheerRunnable;
     
     // Track all finishers for result screen
     private boolean[] hasFinished = new boolean[SO_LUONG_LAN];
     private int[] finishOrder = new int[SO_LUONG_LAN];
     private int finishCount = 0;
 
+    private SoundManager soundManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_race);
 
-        // Khởi tạo SharedPreferences và lấy thông tin người chơi / số dư
+        // Khoi tao SoundManager
+        soundManager = SoundManager.getInstance(this);
+
+        // Xu ly WindowInsets cho edge-to-edge (notch/dynamic island)
+        View rootView = findViewById(android.R.id.content);
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        // Khoi tao SharedPreferences va lay thong tin nguoi choi
         sharedPreferences = getSharedPreferences("user_details", MODE_PRIVATE);
         currentUsername = getIntent().getStringExtra("username");
         if (currentUsername == null || currentUsername.isEmpty()) {
@@ -69,9 +90,15 @@ public class RaceActivity extends AppCompatActivity {
 
         initViews();
 
-        btnStart.setOnClickListener(v -> batDauDua());
-        // Nút Reset giờ có thể bấm bất cứ lúc nào
-        btnReset.setOnClickListener(v -> resetGame());
+        btnStart.setOnClickListener(v -> {
+            soundManager.playClickSound();
+            batDauDua();
+        });
+        
+        btnReset.setOnClickListener(v -> {
+            soundManager.playClickSound();
+            resetGame();
+        });
     }
 
     private void initViews() {
@@ -80,9 +107,8 @@ public class RaceActivity extends AppCompatActivity {
         btnStart = findViewById(R.id.btnStart);
         btnReset = findViewById(R.id.btnReset);
 
-        // Hiển thị số dư hiện tại trong màn đua
         if (tvBalanceInRace != null) {
-            tvBalanceInRace.setText("Số dư: " + currentBalance + "$");
+            tvBalanceInRace.setText("So du: " + currentBalance + "$");
         }
 
         int[] sbIds = {R.id.sb1, R.id.sb2, R.id.sb3, R.id.sb4, R.id.sb5};
@@ -90,14 +116,12 @@ public class RaceActivity extends AppCompatActivity {
         int[] cbIds = {R.id.cbBet1, R.id.cbBet2, R.id.cbBet3, R.id.cbBet4, R.id.cbBet5};
         int[] edtIds = {R.id.edtBet1, R.id.edtBet2, R.id.edtBet3, R.id.edtBet4, R.id.edtBet5};
 
-        // --- THAY ĐỔI 1: Mảng chứa ID ảnh trong Drawable ---
-        // Bạn nhớ đổi tên R.drawable.xxx thành tên file ảnh thực tế của bạn
         int[] racerImageIds = {
-                R.drawable.vit1, // Ảnh cho làn 1
-                R.drawable.vit2, // Ảnh cho làn 2
-                R.drawable.vit3, // Ảnh cho làn 3
-                R.drawable.vit4, // Ảnh cho làn 4
-                R.drawable.vit5  // Ảnh cho làn 5
+                R.drawable.vit1,
+                R.drawable.vit2,
+                R.drawable.vit3,
+                R.drawable.vit4,
+                R.drawable.vit5
         };
 
         for (int i = 0; i < SO_LUONG_LAN; i++) {
@@ -109,25 +133,18 @@ public class RaceActivity extends AppCompatActivity {
             sbRacers[i].setEnabled(false);
             sbRacers[i].setMax(MAX_PROGRESS);
 
-            // Set ảnh trực tiếp từ resource (Không cần Glide nữa)
-            // Nếu bạn chưa có đủ 5 ảnh, code sẽ báo đỏ.
-            // Tạm thời có thể dùng R.mipmap.ic_launcher để test nếu thiếu ảnh.
             try {
                 ivRacers[i].setImageResource(racerImageIds[i]);
             } catch (Exception e) {
-                // Fallback nếu quên copy ảnh
                 ivRacers[i].setImageResource(R.mipmap.ic_launcher);
             }
 
-            // Đặt vị trí xuất phát sau vùng đặt cược
             ivRacers[i].setTranslationX(startOffsetPx);
         }
     }
 
     private void batDauDua() {
-        // --- XỬ LÝ ĐẶT CƯỢC TRƯỚC KHI ĐUA ---
         long tongTienCuoc = 0;
-        // reset mảng cược cũ
         for (int i = 0; i < SO_LUONG_LAN; i++) {
             betAmounts[i] = 0;
         }
@@ -139,7 +156,7 @@ public class RaceActivity extends AppCompatActivity {
 
                 String amountStr = edtBets[i] != null ? edtBets[i].getText().toString().trim() : "";
                 if (amountStr.isEmpty()) {
-                    Toast.makeText(this, "Vui lòng nhập số tiền cho " + "Vịt " + (i + 1), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Vui long nhap so tien cho Vit " + (i + 1), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -147,12 +164,12 @@ public class RaceActivity extends AppCompatActivity {
                 try {
                     amount = Long.parseLong(amountStr);
                 } catch (NumberFormatException e) {
-                    Toast.makeText(this, "Số tiền không hợp lệ cho Vịt " + (i + 1), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "So tien khong hop le cho Vit " + (i + 1), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (amount <= 0) {
-                    Toast.makeText(this, "Số tiền cược phải > 0 cho Vịt " + (i + 1), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "So tien cuoc phai > 0 cho Vit " + (i + 1), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -162,42 +179,46 @@ public class RaceActivity extends AppCompatActivity {
         }
 
         if (!coDatCuoc) {
-            Toast.makeText(this, "Bạn chưa chọn con nào để đặt cược!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ban chua chon con nao de dat cuoc!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (tongTienCuoc > currentBalance) {
-            Toast.makeText(this, "Tổng tiền cược vượt quá số dư!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Tong tien cuoc vuot qua so du!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Save balance before race for result screen
         balanceBeforeRace = currentBalance;
         
-        // Trừ tiền cược ngay khi bắt đầu đua (tiền này sẽ không được hoàn lại khi Reset)
+        // Phat am thanh dat cuoc
+        soundManager.playBetSound();
+
         currentBalance -= tongTienCuoc;
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(currentUsername + "_balance", currentBalance);
         editor.apply();
 
         if (tvBalanceInRace != null) {
-            tvBalanceInRace.setText("Số dư: " + currentBalance + "$");
+            tvBalanceInRace.setText("So du: " + currentBalance + "$");
         }
 
-        // Reset trạng thái trước khi đua (đề phòng trường hợp đua tiếp)
         isRacing = true;
-        // Reset finish tracking
         for (int i = 0; i < SO_LUONG_LAN; i++) {
             hasFinished[i] = false;
             finishOrder[i] = -1;
         }
         finishCount = 0;
         btnStart.setEnabled(false);
-
-        // --- THAY ĐỔI 2: Luôn cho phép bấm Reset ---
         btnReset.setEnabled(true);
 
-        tvTitle.setText("🔥 CUỘC ĐUA BẮT ĐẦU 🔥");
+        // Phat am thanh bat dau dua
+        soundManager.playStartSound();
+        // Chuyen nhac nen sang nhac dua
+        soundManager.playRaceMusic();
+
+        tvTitle.setText("CUOC DU DA BAT DAU!");
+
+        startCheerLoop();
 
         raceRunnable = new Runnable() {
             @Override
@@ -205,7 +226,6 @@ public class RaceActivity extends AppCompatActivity {
                 if (!isRacing) return;
 
                 for (int i = 0; i < SO_LUONG_LAN; i++) {
-                    // Skip racers that have already finished
                     if (hasFinished[i]) continue;
                     
                     int speed = random.nextInt(51) + 10;
@@ -217,12 +237,11 @@ public class RaceActivity extends AppCompatActivity {
                         sbRacers[i].setProgress(newProgress);
                         updatePosition(i, newProgress);
                         
-                        // Mark as finished and record position
                         hasFinished[i] = true;
                         finishOrder[finishCount++] = i;
                         
-                        // Check if all racers have finished
                         if (finishCount >= SO_LUONG_LAN) {
+                            stopCheerLoop();
                             xuLyKetThucDua();
                             return;
                         }
@@ -237,12 +256,30 @@ public class RaceActivity extends AppCompatActivity {
         };
         handler.post(raceRunnable);
     }
+    
+    private void startCheerLoop() {
+        cheerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (isRacing) {
+                    soundManager.playCheerSound();
+                    handler.postDelayed(this, CHEER_INTERVAL_MS);
+                }
+            }
+        };
+        handler.postDelayed(cheerRunnable, CHEER_INTERVAL_MS);
+    }
+    
+    private void stopCheerLoop() {
+        if (cheerRunnable != null) {
+            handler.removeCallbacks(cheerRunnable);
+        }
+    }
 
     private void updatePosition(int index, int progress) {
         SeekBar sb = sbRacers[index];
         ImageView iv = ivRacers[index];
 
-        // Để xe đi được xa hơn, chỉ chừa 20px padding cuối đường đua
         int paddingEndPx = dpToPx(20);
         int trackWidth = sb.getWidth() - paddingEndPx - startOffsetPx;
         int iconWidth = iv.getWidth();
@@ -260,43 +297,42 @@ public class RaceActivity extends AppCompatActivity {
         isRacing = false;
         handler.removeCallbacks(raceRunnable);
 
-        // Show winner briefly
         int winnerIndex = finishOrder[0];
-        String winnerName = "Vịt số " + (winnerIndex + 1);
-        tvTitle.setText("👑 " + winnerName + " CHIẾN THẮNG! 👑");
+        String winnerName = "Vit so " + (winnerIndex + 1);
+        tvTitle.setText(winnerName + " CHIEN THANG!");
         
-        // Launch ResultActivity with all data
-        // Use a short delay to let users see the winner before transitioning
-        handler.postDelayed(() -> launchResultActivity(), 1500);
+        // Kiem tra nguoi choi co thang khong
+        if (betAmounts[winnerIndex] > 0) {
+            soundManager.playWinSound();
+        } else {
+            soundManager.playLoseSound();
+        }
+        
+        handler.postDelayed(() -> launchResultActivity(), 2000);
     }
     
     private void launchResultActivity() {
         Intent intent = new Intent(RaceActivity.this, ResultActivity.class);
         intent.putExtra("rankings", finishOrder);
         intent.putExtra("betAmounts", betAmounts);
-        intent.putExtra("previousBalance", currentBalance); // Balance after bets deducted
+        intent.putExtra("previousBalance", currentBalance);
         intent.putExtra("username", currentUsername);
         startActivity(intent);
-        finish(); // Close RaceActivity
+        finish();
     }
 
-    // --- THAY ĐỔI 3: Logic Reset mạnh mẽ hơn ---
     private void resetGame() {
-        // 1. Dừng ngay lập tức mọi hoạt động đua
         isRacing = false;
         handler.removeCallbacks(raceRunnable);
-
-        // 2. Reset giao diện
-        tvTitle.setText("🏆 DUCK RACE 🏆");
+        stopCheerLoop();
+        
+        tvTitle.setText("DUCK RACE");
         btnStart.setEnabled(true);
-        // btnReset.setEnabled(false); // Có thể tắt dòng này nếu muốn nút Reset luôn sáng
-
-        // 3. Đưa tất cả về vạch xuất phát
+        btnReset.setEnabled(false);
+        
         for (int i = 0; i < SO_LUONG_LAN; i++) {
             sbRacers[i].setProgress(0);
             ivRacers[i].setTranslationX(startOffsetPx);
-
-            // Xoá thông tin cược
             betAmounts[i] = 0;
             if (cbBets[i] != null) {
                 cbBets[i].setChecked(false);
@@ -305,16 +341,38 @@ public class RaceActivity extends AppCompatActivity {
                 edtBets[i].setText("");
             }
         }
-
-        // Hiển thị lại số dư gốc
+        
         if (tvBalanceInRace != null) {
-            tvBalanceInRace.setText("Số dư: " + currentBalance + "$");
+            tvBalanceInRace.setText("So du: " + currentBalance + "$");
         }
-
-        Toast.makeText(this, "Đã làm mới đường đua!", Toast.LENGTH_SHORT).show();
+        
+        Toast.makeText(this, "Da lam moi duong dua!", Toast.LENGTH_SHORT).show();
     }
 
     private int dpToPx(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        soundManager.onResume();
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        soundManager.onPause();
+        if (isRacing) {
+            stopCheerLoop();
+        }
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (soundManager != null) {
+            soundManager.stopBackgroundMusic();
+        }
     }
 }

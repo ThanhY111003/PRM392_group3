@@ -18,11 +18,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Khai báo các view
+    // Khai bao cac view
     private TextView tvPlayerName, tvBalance;
     private Button btnTopup, btnStartBet;
     private SharedPreferences sharedPreferences;
     private String currentUsername;
+    private SoundManager soundManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,39 +31,47 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // Ánh xạ View từ XML
+        // Khoi tao SoundManager
+        soundManager = SoundManager.getInstance(this);
+
+        // Anh xa View tu XML
         initViews();
 
-        // Xử lý Padding cho hệ thống (EdgeToEdge)
+        // Xu ly Padding cho he thong (EdgeToEdge)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Khởi tạo SharedPreferences
+        // Khoi tao SharedPreferences
         sharedPreferences = getSharedPreferences("user_details", MODE_PRIVATE);
 
-        // Lấy username từ Intent gửi sang từ màn hình Login
+        // Lay username tu Intent gui sang tu man hinh Login
         currentUsername = getIntent().getStringExtra("username");
 
-        // Nếu không lấy được username (ví dụ mở trực tiếp), đặt mặc định là Guest
+        // Neu khong lay duoc username (vi du mo truc tiep), dat mac dinh la Guest
         if (currentUsername == null || currentUsername.isEmpty()) {
             currentUsername = "Guest";
         }
 
-        // Hiển thị thông tin lên màn hình
+        // Hien thi thong tin len man hinh
         tvPlayerName.setText(currentUsername);
         updateBalanceDisplay();
 
-        // Xử lý nút Nạp tiền
-        btnTopup.setOnClickListener(v -> showTopupDialog());
+        // Xu ly nut Nap tien
+        btnTopup.setOnClickListener(v -> {
+            soundManager.playClickSound();
+            showTopupDialog();
+        });
 
-        // Xử lý nút Bắt đầu cược (Luồng 3 sẽ dùng)
+        // Xu ly nut Bat dau cuoc (Luong 3 se dung)
         btnStartBet.setOnClickListener(v -> {
-             Toast.makeText(this, "Chuyển sang màn hình đua xe...", Toast.LENGTH_SHORT).show();
-             Intent intent = new Intent(MainActivity.this, RaceActivity.class);
-             startActivity(intent);
+            soundManager.playClickSound();
+            Toast.makeText(this, "Chuyen sang man hinh dua xe...", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, RaceActivity.class);
+            intent.putExtra("username", currentUsername);
+            startActivity(intent);
         });
     }
 
@@ -74,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateBalanceDisplay() {
-        // Đọc số dư từ SharedPreferences, mặc định là 0 nếu chưa có
+        // Doc so du tu SharedPreferences, mac dinh la 0 neu chua co
         long currentBalance = sharedPreferences.getLong(currentUsername + "_balance", 0);
-        tvBalance.setText("Số dư: " + currentBalance + "$");
+        tvBalance.setText("So du: " + currentBalance + "$");
     }
 
     private void showTopupDialog() {
@@ -84,48 +93,72 @@ public class MainActivity extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_topup, null);
         builder.setView(dialogView);
 
-        // Tạo Dialog từ builder
+        // Tao Dialog tu builder
         AlertDialog dialog = builder.create();
 
-        // Ánh xạ các view trong dialog_topup.xml
+        // Anh xa cac view trong dialog_topup.xml
         EditText edtAmount = dialogView.findViewById(R.id.edtAmount);
         Button btnConfirm = dialogView.findViewById(R.id.btnConfirmTopup);
 
-        // Xử lý nút Xác nhận
+        // Xu ly nut Xac nhan
         btnConfirm.setOnClickListener(v -> {
             String amountStr = edtAmount.getText().toString();
 
             if (amountStr.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập số tiền!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Vui long nhap so tien!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             try {
                 long amountToAdd = Long.parseLong(amountStr);
 
-                // 1. Lấy số dư hiện tại từ SharedPreferences
+                // 1. Lay so du hien tai tu SharedPreferences
                 long currentBalance = sharedPreferences.getLong(currentUsername + "_balance", 0);
 
-                // 2. Cộng dồn tiền
+                // 2. Cong don tien
                 long newBalance = currentBalance + amountToAdd;
 
-                // 3. Lưu lại vào bộ nhớ
+                // 3. Luu lai vao bo nho
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putLong(currentUsername + "_balance", newBalance);
                 editor.apply();
 
-                // 4. Cập nhật UI và thông báo
-                updateBalanceDisplay();
-                Toast.makeText(this, "Đã nạp thành công: " + amountToAdd + "$", Toast.LENGTH_SHORT).show();
+                // 4. Cap nhat UI va thong bao
+                // Phat am thanh nap tien thanh cong
+                soundManager.playTopupSound();
 
-                // 5. Đóng Dialog sau khi nạp thành công
+                updateBalanceDisplay();
+                Toast.makeText(this, "Da nap thanh cong: " + amountToAdd + "$", Toast.LENGTH_SHORT).show();
+
+                // 5. Dong Dialog sau khi nap thanh cong
                 dialog.dismiss();
 
             } catch (NumberFormatException e) {
-                Toast.makeText(this, "Số tiền không hợp lệ!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "So tien khong hop le!", Toast.LENGTH_SHORT).show();
             }
         });
 
         dialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        soundManager.onResume();
+        soundManager.playLobbyMusic();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        soundManager.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (soundManager != null) {
+            soundManager.onPause();
+        }
     }
 }
