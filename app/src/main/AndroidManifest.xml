@@ -25,6 +25,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".RaceActivity" />
+        <activity android:name=".ResultActivity" />
     </application>
 
 </manifest>

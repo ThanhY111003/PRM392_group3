@@ -1,5 +1,6 @@
 package com.example.prm392;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +39,7 @@ public class RaceActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private String currentUsername;
     private long currentBalance;
+    private long balanceBeforeRace; // Balance before bets were deducted
     private long[] betAmounts = new long[SO_LUONG_LAN];
     private int startOffsetPx;
 
@@ -45,6 +47,11 @@ public class RaceActivity extends AppCompatActivity {
     private Random random = new Random();
     private boolean isRacing = false;
     private Runnable raceRunnable;
+    
+    // Track all finishers for result screen
+    private boolean[] hasFinished = new boolean[SO_LUONG_LAN];
+    private int[] finishOrder = new int[SO_LUONG_LAN];
+    private int finishCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +171,9 @@ public class RaceActivity extends AppCompatActivity {
             return;
         }
 
+        // Save balance before race for result screen
+        balanceBeforeRace = currentBalance;
+        
         // Trừ tiền cược ngay khi bắt đầu đua (tiền này sẽ không được hoàn lại khi Reset)
         currentBalance -= tongTienCuoc;
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -176,6 +186,12 @@ public class RaceActivity extends AppCompatActivity {
 
         // Reset trạng thái trước khi đua (đề phòng trường hợp đua tiếp)
         isRacing = true;
+        // Reset finish tracking
+        for (int i = 0; i < SO_LUONG_LAN; i++) {
+            hasFinished[i] = false;
+            finishOrder[i] = -1;
+        }
+        finishCount = 0;
         btnStart.setEnabled(false);
 
         // --- THAY ĐỔI 2: Luôn cho phép bấm Reset ---
@@ -189,19 +205,31 @@ public class RaceActivity extends AppCompatActivity {
                 if (!isRacing) return;
 
                 for (int i = 0; i < SO_LUONG_LAN; i++) {
+                    // Skip racers that have already finished
+                    if (hasFinished[i]) continue;
+                    
                     int speed = random.nextInt(51) + 10;
                     int currentProgress = sbRacers[i].getProgress();
                     int newProgress = currentProgress + speed;
 
                     if (newProgress >= MAX_PROGRESS) {
                         newProgress = MAX_PROGRESS;
+                        sbRacers[i].setProgress(newProgress);
                         updatePosition(i, newProgress);
-                        xuLyNguoiThang(i);
-                        return;
+                        
+                        // Mark as finished and record position
+                        hasFinished[i] = true;
+                        finishOrder[finishCount++] = i;
+                        
+                        // Check if all racers have finished
+                        if (finishCount >= SO_LUONG_LAN) {
+                            xuLyKetThucDua();
+                            return;
+                        }
+                    } else {
+                        sbRacers[i].setProgress(newProgress);
+                        updatePosition(i, newProgress);
                     }
-
-                    sbRacers[i].setProgress(newProgress);
-                    updatePosition(i, newProgress);
                 }
 
                 handler.postDelayed(this, DELAY_MS);
@@ -228,34 +256,28 @@ public class RaceActivity extends AppCompatActivity {
         iv.setTranslationX(translationX);
     }
 
-    private void xuLyNguoiThang(int index) {
+    private void xuLyKetThucDua() {
         isRacing = false;
         handler.removeCallbacks(raceRunnable);
 
-        String winnerName = "Vịt số " + (index + 1);
+        // Show winner briefly
+        int winnerIndex = finishOrder[0];
+        String winnerName = "Vịt số " + (winnerIndex + 1);
         tvTitle.setText("👑 " + winnerName + " CHIẾN THẮNG! 👑");
-        Toast.makeText(RaceActivity.this, winnerName + " về nhất!", Toast.LENGTH_LONG).show();
-
-        // Tính tiền thưởng: nếu người chơi có đặt cược đúng con thắng
-        long tienCuocTrung = betAmounts[index];
-        if (tienCuocTrung > 0) {
-            // Ví dụ: trả về x2 số tiền cược (gồm cả gốc và lời)
-            long tienThuong = tienCuocTrung * 2;
-            currentBalance += tienThuong;
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong(currentUsername + "_balance", currentBalance);
-            editor.apply();
-
-            if (tvBalanceInRace != null) {
-                tvBalanceInRace.setText("Số dư: " + currentBalance + "$");
-            }
-
-            Toast.makeText(this, "Bạn thắng " + tienThuong + "$!", Toast.LENGTH_SHORT).show();
-        }
-
-        // Khi thắng xong, nút Start hiện lại
-        btnStart.setEnabled(true);
+        
+        // Launch ResultActivity with all data
+        // Use a short delay to let users see the winner before transitioning
+        handler.postDelayed(() -> launchResultActivity(), 1500);
+    }
+    
+    private void launchResultActivity() {
+        Intent intent = new Intent(RaceActivity.this, ResultActivity.class);
+        intent.putExtra("rankings", finishOrder);
+        intent.putExtra("betAmounts", betAmounts);
+        intent.putExtra("previousBalance", currentBalance); // Balance after bets deducted
+        intent.putExtra("username", currentUsername);
+        startActivity(intent);
+        finish(); // Close RaceActivity
     }
 
     // --- THAY ĐỔI 3: Logic Reset mạnh mẽ hơn ---
