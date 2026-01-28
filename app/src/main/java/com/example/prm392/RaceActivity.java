@@ -68,18 +68,14 @@ public class RaceActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_race);
 
-        // Khoi tao SoundManager
         soundManager = SoundManager.getInstance(this);
 
-        // Xu ly WindowInsets cho edge-to-edge (notch/dynamic island)
-        View rootView = findViewById(android.R.id.content);
-        ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.race_layout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Khoi tao SharedPreferences va lay thong tin nguoi choi
         sharedPreferences = getSharedPreferences("user_details", MODE_PRIVATE);
         currentUsername = getIntent().getStringExtra("username");
         if (currentUsername == null || currentUsername.isEmpty()) {
@@ -206,7 +202,8 @@ public class RaceActivity extends AppCompatActivity {
 
         balanceBeforeRace = currentBalance;
         
-        // Phat am thanh dat cuoc
+        balanceBeforeRace = currentBalance;
+        
         soundManager.playBetSound();
 
         currentBalance -= tongTienCuoc;
@@ -227,15 +224,10 @@ public class RaceActivity extends AppCompatActivity {
         btnStart.setEnabled(false);
         btnReset.setEnabled(true);
 
-        // Phat am thanh bat dau dua
         soundManager.playStartSound();
-        // Chuyen nhac nen sang tieng dam dong ho reo
         soundManager.playRaceMusic();
 
         tvTitle.setText("CUOC DU DA BAT DAU!");
-
-        // Khong can startCheerLoop() vi bgm_race.mp3 da co tieng dam dong ho reo
-        // startCheerLoop();
 
         raceRunnable = new Runnable() {
             @Override
@@ -314,14 +306,12 @@ public class RaceActivity extends AppCompatActivity {
         isRacing = false;
         handler.removeCallbacks(raceRunnable);
         
-        // Dung nhac nen dua
         soundManager.stopBackgroundMusic();
 
         int winnerIndex = finishOrder[0];
         String winnerName = "Vit so " + (winnerIndex + 1);
         tvTitle.setText(winnerName + " CHIEN THANG!");
         
-        // Am thanh thang/thua se phat o ResultActivity
         handler.postDelayed(() -> launchResultActivity(), 2000);
     }
     

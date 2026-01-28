@@ -8,7 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -20,9 +24,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        // Khoi tao SoundManager
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login_layout), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
         soundManager = SoundManager.getInstance(this);
 
         sharedPreferences = getSharedPreferences("user_details", MODE_PRIVATE);
@@ -73,8 +83,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onResume();
         if (soundManager != null) {
             soundManager.onResume();
-            // Tat nhac lobby vi file ngan gay kho chiu
-            // soundManager.playLobbyMusic();
         }
     }
 

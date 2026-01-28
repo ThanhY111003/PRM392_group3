@@ -205,7 +205,6 @@ public class SoundManager {
      * @param musicResId Resource ID of the music file in raw folder
      */
     public void playBackgroundMusic(int musicResId) {
-        // Neu dang phat cung bai nhac thi khong lam gi
         if (currentBgmResId == musicResId && bgmPlayer != null && bgmPlayer.isPlaying()) {
             return;
         }
@@ -216,7 +215,7 @@ public class SoundManager {
             bgmPlayer = MediaPlayer.create(context, musicResId);
             if (bgmPlayer != null) {
                 bgmPlayer.setVolume(bgmVolume, bgmVolume);
-                bgmPlayer.setLooping(false); // Khong lap lai vi file ngan
+                bgmPlayer.setLooping(false);
                 bgmPlayer.start();
                 isBgmPlaying = true;
                 currentBgmResId = musicResId;
@@ -246,9 +245,8 @@ public class SoundManager {
      */
     public void playRaceMusic() {
         try {
-            int musicResId = context.getResources().getIdentifier("bgm_race", "raw", context.getPackageName());
+            int musicResId = context.getResources().getIdentifier("race_crowd_v2", "raw", context.getPackageName());
             if (musicResId != 0) {
-                // Neu dang phat cung bai nhac thi khong lam gi
                 if (currentBgmResId == musicResId && bgmPlayer != null && bgmPlayer.isPlaying()) {
                     return;
                 }
@@ -258,7 +256,7 @@ public class SoundManager {
                 bgmPlayer = MediaPlayer.create(context, musicResId);
                 if (bgmPlayer != null) {
                     bgmPlayer.setVolume(bgmVolume, bgmVolume);
-                    bgmPlayer.setLooping(true); // Loop cho nhac dua
+                    bgmPlayer.setLooping(true);
                     bgmPlayer.start();
                     isBgmPlaying = true;
                     currentBgmResId = musicResId;

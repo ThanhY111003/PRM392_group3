@@ -10,7 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -48,9 +52,15 @@ public class ResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_result);
 
-        // Khoi tao SoundManager
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.result_layout), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
         soundManager = SoundManager.getInstance(this);
 
         initViews();
@@ -62,15 +72,11 @@ public class ResultActivity extends AppCompatActivity {
         showMessage();
         setupButtons();
         
-        // Phat am thanh thang/thua
         if (totalWinnings > 0) {
             soundManager.playWinSound();
         } else {
             soundManager.playLoseSound();
         }
-        
-        // Tat nhac result vi file ngan
-        // soundManager.playResultMusic();
     }
 
     private void initViews() {
