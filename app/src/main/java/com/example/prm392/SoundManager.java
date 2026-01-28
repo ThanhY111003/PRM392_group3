@@ -1,6 +1,7 @@
 package com.example.prm392;
 
 import android.content.Context;
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
@@ -8,6 +9,24 @@ import android.os.Build;
 /**
  * SoundManager - Quản lý âm thanh cho game Duck Race
  * Sử dụng MediaPlayer cho nhạc nền và SoundPool cho hiệu ứng ngắn
+ * 
+ * HƯỚNG DẪN SỬ DỤNG:
+ * 1. Thêm các file âm thanh vào thư mục res/raw/
+ * 2. Gọi SoundManager.getInstance(context) để lấy instance
+ * 3. Gọi các hàm phát âm thanh: playClickSound(), playWinSound(), v.v.
+ * 
+ * DANH SÁCH FILE ÂM THANH CẦN CÓ:
+ * - res/raw/click.mp3          -> Tiếng click nút
+ * - res/raw/success.mp3        -> Tiếng đăng ký/đăng nhập thành công
+ * - res/raw/win.mp3            -> Tiếng pháo hoa khi thắng
+ * - res/raw/lose.mp3           -> Tiếng thua cuộc
+ * - res/raw/bet.mp3            -> Tiếng đặt cược
+ * - res/raw/cheer.mp3          -> Tiếng hò reo khi đua
+ * - res/raw/topup.mp3          -> Tiếng "Kaching" khi nạp tiền
+ * - res/raw/start.mp3          -> Tiếng bắt đầu đua
+ * - res/raw/bgm_lobby.mp3      -> Nhạc nền lobby
+ * - res/raw/bgm_race.mp3       -> Nhạc nền khi đua
+ * - res/raw/bgm_result.mp3     -> Nhạc nền màn hình kết quả
  */
 public class SoundManager {
 
@@ -18,23 +37,24 @@ public class SoundManager {
     private SoundPool soundPool;
     private boolean soundPoolLoaded = false;
 
-    // Sound IDs
-    private int soundClick;
-    private int soundSuccess;
-    private int soundWin;
-    private int soundLose;
-    private int soundBet;
-    private int soundCheer;
-    private int soundTopup;
-    private int soundStart;
+    // Sound IDs (loaded from SoundPool)
+    private int soundClick = -1;
+    private int soundSuccess = -1;
+    private int soundWin = -1;
+    private int soundLose = -1;
+    private int soundBet = -1;
+    private int soundCheer = -1;
+    private int soundTopup = -1;
+    private int soundStart = -1;
 
     // MediaPlayer for background music
     private MediaPlayer bgmPlayer;
     private boolean isBgmPlaying = false;
+    private int currentBgmResId = 0;
 
     // Volume settings
-    private float sfxVolume = 0.8f;
-    private float bgmVolume = 0.5f;
+    private float sfxVolume = 1.0f;
+    private float bgmVolume = 0.6f;
 
     private SoundManager(Context context) {
         this.context = context.getApplicationContext();
@@ -52,59 +72,57 @@ public class SoundManager {
      * Initialize SoundPool for sound effects
      */
     private void initSoundPool() {
-        // Build SoundPool based on Android version
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+
             soundPool = new SoundPool.Builder()
-                    .setMaxStreams(5)
+                    .setMaxStreams(6)
+                    .setAudioAttributes(audioAttributes)
                     .build();
         } else {
-            soundPool = new SoundPool(5, android.media.AudioManager.STREAM_MUSIC, 0);
+            soundPool = new SoundPool(6, android.media.AudioManager.STREAM_MUSIC, 0);
         }
 
         soundPool.setOnLoadCompleteListener((soundPool, sampleId, status) -> {
-            soundPoolLoaded = true;
+            if (status == 0) {
+                soundPoolLoaded = true;
+            }
         });
 
-        // Load sound effects (using placeholder resources)
-        // Note: Replace R.raw.sound_name with actual audio files
         loadSounds();
     }
 
     /**
      * Load sound effects from raw resources
-     * Add your audio files to res/raw/ folder
      */
     private void loadSounds() {
+        // Load each sound file - SoundPool.load() returns stream ID
+        soundClick = loadSound("click");
+        soundSuccess = loadSound("success");
+        soundWin = loadSound("win");
+        soundLose = loadSound("lose");
+        soundBet = loadSound("bet");
+        soundCheer = loadSound("cheer");
+        soundTopup = loadSound("topup");
+        soundStart = loadSound("start");
+    }
+
+    /**
+     * Helper method to load a single sound
+     */
+    private int loadSound(String soundName) {
         try {
-            // Try to load sounds - these will fail if files don't exist
-            // but the app will still work
-            soundClick = context.getResources().getIdentifier("click", "raw", context.getPackageName());
-            if (soundClick == 0) soundClick = -1;
-
-            soundSuccess = context.getResources().getIdentifier("success", "raw", context.getPackageName());
-            if (soundSuccess == 0) soundSuccess = -1;
-
-            soundWin = context.getResources().getIdentifier("win", "raw", context.getPackageName());
-            if (soundWin == 0) soundWin = -1;
-
-            soundLose = context.getResources().getIdentifier("lose", "raw", context.getPackageName());
-            if (soundLose == 0) soundLose = -1;
-
-            soundBet = context.getResources().getIdentifier("bet", "raw", context.getPackageName());
-            if (soundBet == 0) soundBet = -1;
-
-            soundCheer = context.getResources().getIdentifier("cheer", "raw", context.getPackageName());
-            if (soundCheer == 0) soundCheer = -1;
-
-            soundTopup = context.getResources().getIdentifier("topup", "raw", context.getPackageName());
-            if (soundTopup == 0) soundTopup = -1;
-
-            soundStart = context.getResources().getIdentifier("start", "raw", context.getPackageName());
-            if (soundStart == 0) soundStart = -1;
-
+            int resId = context.getResources().getIdentifier(soundName, "raw", context.getPackageName());
+            if (resId != 0) {
+                return soundPool.load(context, resId, 1);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     // ==================== PLAY SOUND METHODS ====================
@@ -124,7 +142,7 @@ public class SoundManager {
     }
 
     /**
-     * Play win sound (won the race)
+     * Play win sound - Tiếng pháo hoa khi thắng
      */
     public void playWinSound() {
         playSfx(soundWin);
@@ -145,14 +163,14 @@ public class SoundManager {
     }
 
     /**
-     * Play cheer sound (during race)
+     * Play cheer sound - Tiếng hò reo khi đang đua
      */
     public void playCheerSound() {
         playSfx(soundCheer);
     }
 
     /**
-     * Play topup/coin sound
+     * Play topup/coin sound - Tiếng "Kaching" khi nhận tiền
      */
     public void playTopupSound() {
         playSfx(soundTopup);
@@ -166,10 +184,10 @@ public class SoundManager {
     }
 
     /**
-     * Generic method to play a sound
+     * Generic method to play a sound effect
      */
     private void playSfx(int soundId) {
-        if (soundPool == null || !soundPoolLoaded || soundId == -1) {
+        if (soundPool == null || soundId <= 0) {
             return;
         }
 
@@ -187,15 +205,21 @@ public class SoundManager {
      * @param musicResId Resource ID of the music file in raw folder
      */
     public void playBackgroundMusic(int musicResId) {
+        // Neu dang phat cung bai nhac thi khong lam gi
+        if (currentBgmResId == musicResId && bgmPlayer != null && bgmPlayer.isPlaying()) {
+            return;
+        }
+        
         stopBackgroundMusic();
 
         try {
             bgmPlayer = MediaPlayer.create(context, musicResId);
             if (bgmPlayer != null) {
                 bgmPlayer.setVolume(bgmVolume, bgmVolume);
-                bgmPlayer.setLooping(true);
+                bgmPlayer.setLooping(false); // Khong lap lai vi file ngan
                 bgmPlayer.start();
                 isBgmPlaying = true;
+                currentBgmResId = musicResId;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,21 +236,36 @@ public class SoundManager {
                 playBackgroundMusic(musicResId);
             }
         } catch (Exception e) {
-            // No music file, that's okay
+            // No music file
         }
     }
 
     /**
-     * Play race music
+     * Play race music - Tieng dam dong ho reo khi dua
+     * Su dung looping vi file da du dai
      */
     public void playRaceMusic() {
         try {
             int musicResId = context.getResources().getIdentifier("bgm_race", "raw", context.getPackageName());
             if (musicResId != 0) {
-                playBackgroundMusic(musicResId);
+                // Neu dang phat cung bai nhac thi khong lam gi
+                if (currentBgmResId == musicResId && bgmPlayer != null && bgmPlayer.isPlaying()) {
+                    return;
+                }
+                
+                stopBackgroundMusic();
+                
+                bgmPlayer = MediaPlayer.create(context, musicResId);
+                if (bgmPlayer != null) {
+                    bgmPlayer.setVolume(bgmVolume, bgmVolume);
+                    bgmPlayer.setLooping(true); // Loop cho nhac dua
+                    bgmPlayer.start();
+                    isBgmPlaying = true;
+                    currentBgmResId = musicResId;
+                }
             }
         } catch (Exception e) {
-            // No music file, that's okay
+            // No music file
         }
     }
 
@@ -240,7 +279,7 @@ public class SoundManager {
                 playBackgroundMusic(musicResId);
             }
         } catch (Exception e) {
-            // No music file, that's okay
+            // No music file
         }
     }
 
@@ -260,6 +299,7 @@ public class SoundManager {
             }
         }
         isBgmPlaying = false;
+        currentBgmResId = 0;
     }
 
     /**
@@ -276,7 +316,11 @@ public class SoundManager {
      */
     public void resumeBackgroundMusic() {
         if (bgmPlayer != null && !bgmPlayer.isPlaying()) {
-            bgmPlayer.start();
+            try {
+                bgmPlayer.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -306,11 +350,10 @@ public class SoundManager {
         }
     }
 
-    // ==================== CLEANUP ====================
+    // ==================== LIFECYCLE METHODS ====================
 
     /**
      * Release all resources
-     * Call this in Application.onTerminate() or when app closes
      */
     public void release() {
         stopBackgroundMusic();
@@ -321,20 +364,20 @@ public class SoundManager {
         }
 
         soundPoolLoaded = false;
+        instance = null;
     }
 
     /**
-     * Pause all sounds when app goes to background
+     * Pause when app goes to background
      */
     public void onPause() {
         pauseBackgroundMusic();
     }
 
     /**
-     * Resume sounds when app comes to foreground
+     * Resume when app comes to foreground
      */
     public void onResume() {
         resumeBackgroundMusic();
     }
 }
-

@@ -43,11 +43,15 @@ public class ResultActivity extends AppCompatActivity {
     };
 
     private SharedPreferences sharedPreferences;
+    private SoundManager soundManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+
+        // Khoi tao SoundManager
+        soundManager = SoundManager.getInstance(this);
 
         initViews();
         receiveIntentData();
@@ -57,6 +61,16 @@ public class ResultActivity extends AppCompatActivity {
         displayBalanceSummary();
         showMessage();
         setupButtons();
+        
+        // Phat am thanh thang/thua
+        if (totalWinnings > 0) {
+            soundManager.playWinSound();
+        } else {
+            soundManager.playLoseSound();
+        }
+        
+        // Tat nhac result vi file ngan
+        // soundManager.playResultMusic();
     }
 
     private void initViews() {
@@ -289,6 +303,7 @@ public class ResultActivity extends AppCompatActivity {
     private void setupButtons() {
         // Race Again - Go back to RaceActivity
         btnRaceAgain.setOnClickListener(v -> {
+            soundManager.playClickSound();
             Intent intent = new Intent(ResultActivity.this, RaceActivity.class);
             intent.putExtra("username", currentUsername);
             startActivity(intent);
@@ -297,10 +312,35 @@ public class ResultActivity extends AppCompatActivity {
 
         // Back to Lobby - Go to MainActivity
         btnBackToLobby.setOnClickListener(v -> {
+            soundManager.playClickSound();
             Intent intent = new Intent(ResultActivity.this, MainActivity.class);
             intent.putExtra("username", currentUsername);
             startActivity(intent);
             finish();
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (soundManager != null) {
+            soundManager.onResume();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (soundManager != null) {
+            soundManager.onPause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (soundManager != null) {
+            soundManager.stopBackgroundMusic();
+        }
     }
 }

@@ -34,7 +34,7 @@ public class RaceActivity extends AppCompatActivity {
 
     private SeekBar[] sbRacers = new SeekBar[SO_LUONG_LAN];
     private ImageView[] ivRacers = new ImageView[SO_LUONG_LAN];
-    private Button btnStart, btnReset;
+    private Button btnStart, btnReset, btnExit;
     private TextView tvTitle, tvBalanceInRace;
 
     // View dat cuoc
@@ -99,6 +99,21 @@ public class RaceActivity extends AppCompatActivity {
             soundManager.playClickSound();
             resetGame();
         });
+        
+        btnExit.setOnClickListener(v -> {
+            soundManager.playClickSound();
+            // Dung cuoc dua neu dang chay
+            if (isRacing) {
+                isRacing = false;
+                handler.removeCallbacks(raceRunnable);
+                stopCheerLoop();
+            }
+            // Quay ve MainActivity
+            Intent intent = new Intent(RaceActivity.this, MainActivity.class);
+            intent.putExtra("username", currentUsername);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void initViews() {
@@ -106,6 +121,7 @@ public class RaceActivity extends AppCompatActivity {
         tvBalanceInRace = findViewById(R.id.tvBalanceInRace);
         btnStart = findViewById(R.id.btnStart);
         btnReset = findViewById(R.id.btnReset);
+        btnExit = findViewById(R.id.btnExit);
 
         if (tvBalanceInRace != null) {
             tvBalanceInRace.setText("So du: " + currentBalance + "$");
@@ -213,12 +229,13 @@ public class RaceActivity extends AppCompatActivity {
 
         // Phat am thanh bat dau dua
         soundManager.playStartSound();
-        // Chuyen nhac nen sang nhac dua
+        // Chuyen nhac nen sang tieng dam dong ho reo
         soundManager.playRaceMusic();
 
         tvTitle.setText("CUOC DU DA BAT DAU!");
 
-        startCheerLoop();
+        // Khong can startCheerLoop() vi bgm_race.mp3 da co tieng dam dong ho reo
+        // startCheerLoop();
 
         raceRunnable = new Runnable() {
             @Override
@@ -296,18 +313,15 @@ public class RaceActivity extends AppCompatActivity {
     private void xuLyKetThucDua() {
         isRacing = false;
         handler.removeCallbacks(raceRunnable);
+        
+        // Dung nhac nen dua
+        soundManager.stopBackgroundMusic();
 
         int winnerIndex = finishOrder[0];
         String winnerName = "Vit so " + (winnerIndex + 1);
         tvTitle.setText(winnerName + " CHIEN THANG!");
         
-        // Kiem tra nguoi choi co thang khong
-        if (betAmounts[winnerIndex] > 0) {
-            soundManager.playWinSound();
-        } else {
-            soundManager.playLoseSound();
-        }
-        
+        // Am thanh thang/thua se phat o ResultActivity
         handler.postDelayed(() -> launchResultActivity(), 2000);
     }
     

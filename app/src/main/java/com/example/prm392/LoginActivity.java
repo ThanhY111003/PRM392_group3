@@ -15,11 +15,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextUsername, editTextPassword;
     private Button buttonLogin, buttonNavigateToRegister;
     private SharedPreferences sharedPreferences;
+    private SoundManager soundManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Khoi tao SoundManager
+        soundManager = SoundManager.getInstance(this);
 
         sharedPreferences = getSharedPreferences("user_details", MODE_PRIVATE);
 
@@ -31,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundManager.playClickSound();
                 String username = editTextUsername.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
 
@@ -40,8 +45,10 @@ public class LoginActivity extends AppCompatActivity {
                     String registeredPassword = sharedPreferences.getString(username, "");
 
                     if (registeredPassword.equals(password)) {
+                        soundManager.playSuccessSound();
                         Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("username", username);
                         startActivity(intent);
                         finish();
                     } else {
@@ -54,9 +61,28 @@ public class LoginActivity extends AppCompatActivity {
         buttonNavigateToRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundManager.playClickSound();
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (soundManager != null) {
+            soundManager.onResume();
+            // Tat nhac lobby vi file ngan gay kho chiu
+            // soundManager.playLobbyMusic();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (soundManager != null) {
+            soundManager.onPause();
+        }
     }
 }

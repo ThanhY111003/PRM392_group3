@@ -145,7 +145,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         soundManager.onResume();
-        soundManager.playLobbyMusic();
+        // Tat nhac lobby vi file ngan gay kho chiu
+        // soundManager.playLobbyMusic();
     }
 
     @Override
