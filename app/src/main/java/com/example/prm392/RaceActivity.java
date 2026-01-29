@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -129,11 +128,11 @@ public class RaceActivity extends AppCompatActivity {
         int[] edtIds = {R.id.edtBet1, R.id.edtBet2, R.id.edtBet3, R.id.edtBet4, R.id.edtBet5};
 
         int[] racerImageIds = {
-                R.drawable.vit1,
-                R.drawable.vit2,
-                R.drawable.vit3,
-                R.drawable.vit4,
-                R.drawable.vit5
+                R.drawable.vit6,
+                R.drawable.vit6,
+                R.drawable.vit6,
+                R.drawable.vit6,
+                R.drawable.vit6
         };
 
         for (int i = 0; i < SO_LUONG_LAN; i++) {
