@@ -17,7 +17,7 @@
             android:id="@+id/tvResultTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="🏁 RACE RESULTS 🏁"
+            android:text="🏁 KẾT QUẢ CUỘC ĐUA 🏁"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#2C3E50"
@@ -42,7 +42,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="🏆 Top 3 Finishers"
+                    android:text="🏆 Top 3 Về Đích"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#34495E"
@@ -177,7 +177,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="📊 Your Bets"
+                    android:text="📊 Cược Của Bạn"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#34495E"
@@ -212,7 +212,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="💰 Balance Summary"
+                    android:text="💰 Tổng Kết Số Dư"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#34495E"
@@ -228,7 +228,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Previous Balance:"
+                        android:text="Số Dư Trước:"
                         android:textSize="16sp"
                         android:textColor="#7F8C8D"/>
 
@@ -252,7 +252,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Total Bet:"
+                        android:text="Tổng Tiền Cược:"
                         android:textSize="16sp"
                         android:textColor="#7F8C8D"/>
 
@@ -276,7 +276,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Total Winnings:"
+                        android:text="Tổng Tiền Thắng:"
                         android:textSize="16sp"
                         android:textColor="#7F8C8D"/>
 
@@ -305,7 +305,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="New Balance:"
+                        android:text="Số Dư Mới:"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#2C3E50"/>
@@ -327,7 +327,7 @@
             android:id="@+id/tvResultMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="🎉 Congratulations! You won!"
+            android:text="🎉 Chúc mừng! Bạn đã thắng!"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#27AE60"
@@ -349,7 +349,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:text="🏁 Race Again"
+                android:text="🏁 Đua Lại"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:backgroundTint="#3498DB"
@@ -361,7 +361,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:text="🏠 Back to Lobby"
+                android:text="🏠 Về Sảnh"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:backgroundTint="#95A5A6"
