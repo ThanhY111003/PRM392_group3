@@ -236,7 +236,7 @@ public class RaceActivity extends AppCompatActivity {
                 for (int i = 0; i < SO_LUONG_LAN; i++) {
                     if (hasFinished[i]) continue;
                     
-                    int speed = random.nextInt(51) + 10;
+                    int speed = random.nextInt(71) + 10;
                     int currentProgress = sbRacers[i].getProgress();
                     int newProgress = currentProgress + speed;
 

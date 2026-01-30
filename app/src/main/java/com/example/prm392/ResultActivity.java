@@ -39,11 +39,11 @@ public class ResultActivity extends AppCompatActivity {
 
     // Duck image resources
     private int[] racerImageIds = {
-            R.drawable.vit1,
-            R.drawable.vit2,
-            R.drawable.vit3,
-            R.drawable.vit4,
-            R.drawable.vit5
+            R.drawable.vit6,
+            R.drawable.vit6,
+            R.drawable.vit6,
+            R.drawable.vit6,
+            R.drawable.vit6
     };
 
     private SharedPreferences sharedPreferences;
