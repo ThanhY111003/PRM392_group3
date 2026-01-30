@@ -19,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvPlayerName, tvBalance;
-    private Button btnTopup, btnStartBet;
+    private Button btnTopup, btnStartBet, btnTutorial;
     private SharedPreferences sharedPreferences;
     private String currentUsername;
     private SoundManager soundManager;
@@ -58,9 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
         btnStartBet.setOnClickListener(v -> {
             soundManager.playClickSound();
-            Toast.makeText(this, "Chuyen sang man hinh dua xe...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Chuyển sang màn hình đua xe...", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, RaceActivity.class);
             intent.putExtra("username", currentUsername);
+            startActivity(intent);
+        });
+
+        btnTutorial.setOnClickListener(v -> {
+            soundManager.playClickSound();
+            Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
             startActivity(intent);
         });
     }
@@ -70,11 +76,13 @@ public class MainActivity extends AppCompatActivity {
         tvBalance = findViewById(R.id.tvBalance);
         btnTopup = findViewById(R.id.btnTopup);
         btnStartBet = findViewById(R.id.btnStartBet);
+        // 3. Ánh xạ nút Tutorial (Bạn cần thêm Button có id này vào activity_main.xml)
+        btnTutorial = findViewById(R.id.btnTutorial);
     }
 
     private void updateBalanceDisplay() {
         long currentBalance = sharedPreferences.getLong(currentUsername + "_balance", 0);
-        tvBalance.setText("So du: " + currentBalance + "$");
+        tvBalance.setText("Số dư: " + currentBalance + "$");
     }
 
     private void showTopupDialog() {
@@ -91,15 +99,13 @@ public class MainActivity extends AppCompatActivity {
             String amountStr = edtAmount.getText().toString();
 
             if (amountStr.isEmpty()) {
-                Toast.makeText(this, "Vui long nhap so tien!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Vui lòng nhập số tiền!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             try {
                 long amountToAdd = Long.parseLong(amountStr);
-
                 long currentBalance = sharedPreferences.getLong(currentUsername + "_balance", 0);
-
                 long newBalance = currentBalance + amountToAdd;
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -109,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
                 soundManager.playTopupSound();
 
                 updateBalanceDisplay();
-                Toast.makeText(this, "Da nap thanh cong: " + amountToAdd + "$", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Đã nạp thành công: " + amountToAdd + "$", Toast.LENGTH_SHORT).show();
 
                 dialog.dismiss();
 
             } catch (NumberFormatException e) {
-                Toast.makeText(this, "So tien khong hop le!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Số tiền không hợp lệ!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -124,20 +130,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        soundManager.onResume();
+        if (soundManager != null) {
+            soundManager.onResume();
+        }
+        // Cập nhật lại số dư khi quay về từ màn hình khác
+        updateBalanceDisplay();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        soundManager.onPause();
+        if (soundManager != null) {
+            soundManager.onPause();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (soundManager != null) {
-            soundManager.onPause();
-        }
+        // Không cần gọi thêm vì onPause đã xử lý soundManager
     }
 }
