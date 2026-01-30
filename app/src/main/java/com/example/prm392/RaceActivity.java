@@ -35,7 +35,9 @@ public class RaceActivity extends AppCompatActivity {
 
     private SeekBar[] sbRacers = new SeekBar[SO_LUONG_LAN];
     private ImageView[] ivRacers = new ImageView[SO_LUONG_LAN];
-    private Button btnStart, btnReset, btnExit;
+    private Button btnStart, btnExit;
+
+    // private Button btnReset;
     private TextView tvTitle, tvBalanceInRace;
 
     // View dat cuoc
@@ -92,10 +94,10 @@ public class RaceActivity extends AppCompatActivity {
             batDauDua();
         });
         
-        btnReset.setOnClickListener(v -> {
-            soundManager.playClickSound();
-            resetGame();
-        });
+//        btnReset.setOnClickListener(v -> {
+//            soundManager.playClickSound();
+//            resetGame();
+//        });
         
         btnExit.setOnClickListener(v -> {
             soundManager.playClickSound();
@@ -117,7 +119,7 @@ public class RaceActivity extends AppCompatActivity {
         tvTitle = findViewById(R.id.tvTitle);
         tvBalanceInRace = findViewById(R.id.tvBalanceInRace);
         btnStart = findViewById(R.id.btnStart);
-        btnReset = findViewById(R.id.btnReset);
+        // btnReset = findViewById(R.id.btnReset);
         btnExit = findViewById(R.id.btnExit);
 
         if (tvBalanceInRace != null) {
@@ -273,12 +275,12 @@ public class RaceActivity extends AppCompatActivity {
         }
         finishCount = 0;
         btnStart.setEnabled(false);
-        btnReset.setEnabled(true);
+        // btnReset.setEnabled(true);
 
         soundManager.playStartSound();
         soundManager.playRaceMusic();
 
-        tvTitle.setText("CUOC DU DA BAT DAU!");
+        tvTitle.setText("CUOC DUA DA BAT DAU!");
 
         raceRunnable = new Runnable() {
             @Override
@@ -383,7 +385,7 @@ public class RaceActivity extends AppCompatActivity {
         
         tvTitle.setText("DUCK RACE");
         btnStart.setEnabled(true);
-        btnReset.setEnabled(false);
+        // btnReset.setEnabled(false);
         
         for (int i = 0; i < SO_LUONG_LAN; i++) {
             sbRacers[i].setProgress(0);
