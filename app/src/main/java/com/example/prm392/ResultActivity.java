@@ -42,7 +42,6 @@ public class ResultActivity extends AppCompatActivity {
             R.drawable.vit9,
             R.drawable.vit9,
             R.drawable.vit9,
-            R.drawable.vit9,
             R.drawable.vit9
     };
 
@@ -71,7 +70,7 @@ public class ResultActivity extends AppCompatActivity {
         displayBalanceSummary();
         showMessage();
         setupButtons();
-        
+
         if (totalWinnings > 0) {
             soundManager.playWinSound();
         } else {
@@ -116,8 +115,10 @@ public class ResultActivity extends AppCompatActivity {
         currentUsername = intent.getStringExtra("username");
 
         // Fallback values
-        if (rankings == null) rankings = new int[]{0, 1, 2, 3, 4};
-        if (betAmounts == null) betAmounts = new long[5];
+        if (rankings == null)
+            rankings = new int[] { 0, 1, 2, 3 };
+        if (betAmounts == null)
+            betAmounts = new long[4];
         if (currentUsername == null || currentUsername.isEmpty()) {
             currentUsername = "Guest";
         }
@@ -139,7 +140,7 @@ public class ResultActivity extends AppCompatActivity {
             totalWinnings = betAmounts[winnerIndex] * 2;
         }
 
-        //newBalance = currentBalance (after bets) + winnings
+        // newBalance = currentBalance (after bets) + winnings
         newBalance = previousBalance + totalWinnings;
 
         // Update balance in SharedPreferences
@@ -197,8 +198,7 @@ public class ResultActivity extends AppCompatActivity {
         row.setPadding(0, 8, 0, 8);
         LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
+                LinearLayout.LayoutParams.WRAP_CONTENT);
         row.setLayoutParams(rowParams);
 
         // Duck name
@@ -209,8 +209,7 @@ public class ResultActivity extends AppCompatActivity {
         LinearLayout.LayoutParams nameParams = new LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.5f
-        );
+                1.5f);
         tvDuckName.setLayoutParams(nameParams);
         row.addView(tvDuckName);
 
@@ -222,8 +221,7 @@ public class ResultActivity extends AppCompatActivity {
         LinearLayout.LayoutParams betParams = new LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                1f
-        );
+                1f);
         tvBetAmount.setLayoutParams(betParams);
         tvBetAmount.setGravity(Gravity.CENTER);
         row.addView(tvBetAmount);
@@ -243,8 +241,7 @@ public class ResultActivity extends AppCompatActivity {
         LinearLayout.LayoutParams resultParams = new LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                1f
-        );
+                1f);
         tvResult.setLayoutParams(resultParams);
         tvResult.setGravity(Gravity.CENTER);
         row.addView(tvResult);
@@ -264,8 +261,7 @@ public class ResultActivity extends AppCompatActivity {
         LinearLayout.LayoutParams payoutParams = new LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.5f
-        );
+                1.5f);
         tvPayout.setLayoutParams(payoutParams);
         tvPayout.setGravity(Gravity.END);
         row.addView(tvPayout);
@@ -276,8 +272,7 @@ public class ResultActivity extends AppCompatActivity {
         View divider = new View(this);
         divider.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                1
-        ));
+                1));
         divider.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
         layoutBettingStats.addView(divider);
     }

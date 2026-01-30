@@ -9,11 +9,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="🏆 DUCK RACE 🏆"
-        android:textSize="28sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#01579B"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="8dp"/>
 
     <TextView
         android:id="@+id/tvBalanceInRace"
@@ -22,236 +22,21 @@
         android:text="Số dư: 0$"
         android:textColor="#D32F2F"
         android:textStyle="bold"
+        android:textSize="16sp"
         android:layout_below="@id/tvTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="4dp" />
 
-    <View
-        android:id="@+id/finishLine"
-        android:layout_width="10dp"
-        android:layout_height="match_parent"
-        android:background="#D32F2F"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="110dp"
-        android:layout_marginBottom="100dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FINISH"
-        android:textColor="#D32F2F"
-        android:textStyle="bold"
-        android:rotation="90"
-        android:layout_alignEnd="@id/finishLine"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="-20dp"/>
-
-    <!-- Khu vực đường đua: chỉ còn lane + xe -->
-    <LinearLayout
-        android:id="@+id/layoutTrack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@id/tvBalanceInRace"
-        android:layout_marginTop="20dp"
-        android:paddingStart="10dp">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#4FC3F7"
-                android:alpha="0.3"
-                android:layout_marginEnd="60dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textColor="#01579B"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_gravity="center_vertical|start"
-                android:paddingStart="8dp" />
-
-            <SeekBar
-                android:id="@+id/sb1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:thumb="@android:color/transparent"
-                android:progressDrawable="@android:color/transparent" />
-
-            <ImageView
-                android:id="@+id/iv1"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical|start" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#4FC3F7"
-                android:alpha="0.3"
-                android:layout_marginEnd="60dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2"
-                android:textColor="#01579B"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_gravity="center_vertical|start"
-                android:paddingStart="8dp" />
-
-            <SeekBar
-                android:id="@+id/sb2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:thumb="@android:color/transparent"
-                android:progressDrawable="@android:color/transparent" />
-
-            <ImageView
-                android:id="@+id/iv2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical|start" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#4FC3F7"
-                android:alpha="0.3"
-                android:layout_marginEnd="60dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3"
-                android:textColor="#01579B"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_gravity="center_vertical|start"
-                android:paddingStart="8dp" />
-
-            <SeekBar
-                android:id="@+id/sb3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:thumb="@android:color/transparent"
-                android:progressDrawable="@android:color/transparent" />
-
-            <ImageView
-                android:id="@+id/iv3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical|start" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#4FC3F7"
-                android:alpha="0.3"
-                android:layout_marginEnd="60dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4"
-                android:textColor="#01579B"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_gravity="center_vertical|start"
-                android:paddingStart="8dp" />
-
-            <SeekBar
-                android:id="@+id/sb4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:thumb="@android:color/transparent"
-                android:progressDrawable="@android:color/transparent" />
-
-            <ImageView
-                android:id="@+id/iv4"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical|start" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#4FC3F7"
-                android:alpha="0.3"
-                android:layout_marginEnd="60dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5"
-                android:textColor="#01579B"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_gravity="center_vertical|start"
-                android:paddingStart="8dp" />
-
-            <SeekBar
-                android:id="@+id/sb5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:thumb="@android:color/transparent"
-                android:progressDrawable="@android:color/transparent" />
-
-            <ImageView
-                android:id="@+id/iv5"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical|start" />
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <!-- Khu vực đặt cược: đưa xuống dưới đường đua -->
+    <!-- Khu vực đặt cược: đặt bên trái màn hình -->
     <LinearLayout
         android:id="@+id/layoutBetting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_below="@id/tvBalanceInRace"
+        android:layout_alignParentStart="true"
         android:layout_above="@+id/layoutControls"
-        android:padding="12dp"
+        android:padding="8dp"
         android:background="#804FC3F7">
 
         <LinearLayout
@@ -272,9 +57,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:hint="Tiền"
                 android:inputType="number"
+                android:textSize="14sp"
                 android:singleLine="true" />
         </LinearLayout>
 
@@ -296,9 +82,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:hint="Tiền"
                 android:inputType="number"
+                android:textSize="14sp"
                 android:singleLine="true" />
         </LinearLayout>
 
@@ -320,9 +107,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:hint="Tiền"
                 android:inputType="number"
+                android:textSize="14sp"
                 android:singleLine="true" />
         </LinearLayout>
 
@@ -330,8 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="4dp">
+            android:gravity="center_vertical">
 
             <CheckBox
                 android:id="@+id/cbBet4"
@@ -344,36 +131,204 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:hint="Tiền"
                 android:inputType="number"
-                android:singleLine="true" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <CheckBox
-                android:id="@+id/cbBet5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5" />
-
-            <EditText
-                android:id="@+id/edtBet5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:hint="Tiền"
-                android:inputType="number"
+                android:textSize="14sp"
                 android:singleLine="true" />
         </LinearLayout>
 
     </LinearLayout>
+
+    <!-- Khu vực đường đua: đặt bên phải khu vực đặt cược -->
+    <LinearLayout
+        android:id="@+id/layoutTrack"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/tvBalanceInRace"
+        android:layout_toEndOf="@id/layoutBetting"
+        android:layout_above="@+id/layoutControls"
+        android:layout_marginTop="8dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="4dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#4FC3F7"
+                android:alpha="0.3"
+                android:layout_marginEnd="40dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textColor="#01579B"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_gravity="center_vertical|start"
+                android:paddingStart="8dp" />
+
+            <SeekBar
+                android:id="@+id/sb1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:thumb="@android:color/transparent"
+                android:progressDrawable="@android:color/transparent" />
+
+            <ImageView
+                android:id="@+id/iv1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|start" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="4dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#4FC3F7"
+                android:alpha="0.3"
+                android:layout_marginEnd="40dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2"
+                android:textColor="#01579B"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_gravity="center_vertical|start"
+                android:paddingStart="8dp" />
+
+            <SeekBar
+                android:id="@+id/sb2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:thumb="@android:color/transparent"
+                android:progressDrawable="@android:color/transparent" />
+
+            <ImageView
+                android:id="@+id/iv2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|start" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="4dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#4FC3F7"
+                android:alpha="0.3"
+                android:layout_marginEnd="40dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textColor="#01579B"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_gravity="center_vertical|start"
+                android:paddingStart="8dp" />
+
+            <SeekBar
+                android:id="@+id/sb3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:thumb="@android:color/transparent"
+                android:progressDrawable="@android:color/transparent" />
+
+            <ImageView
+                android:id="@+id/iv3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|start" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="4dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#4FC3F7"
+                android:alpha="0.3"
+                android:layout_marginEnd="40dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4"
+                android:textColor="#01579B"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_gravity="center_vertical|start"
+                android:paddingStart="8dp" />
+
+            <SeekBar
+                android:id="@+id/sb4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:thumb="@android:color/transparent"
+                android:progressDrawable="@android:color/transparent" />
+
+            <ImageView
+                android:id="@+id/iv4"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|start" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- Vạch đích -->
+    <View
+        android:id="@+id/finishLine"
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:background="#D32F2F"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/tvBalanceInRace"
+        android:layout_above="@id/layoutControls"
+        android:layout_marginEnd="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FINISH"
+        android:textColor="#D32F2F"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:rotation="90"
+        android:layout_alignEnd="@id/finishLine"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="-15dp"/>
 
     <!-- Thanh nút điều khiển ở đáy màn hình -->
     <LinearLayout
@@ -383,7 +338,7 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:gravity="center"
-        android:padding="20dp">
+        android:padding="12dp">
 
         <Button
             android:id="@+id/btnStart"
@@ -395,8 +350,6 @@
             android:textColor="#000"
             android:textStyle="bold"
             android:layout_marginEnd="8dp" />
-
-
 
         <Button
             android:id="@+id/btnExit"

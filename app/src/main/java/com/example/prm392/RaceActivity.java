@@ -25,7 +25,7 @@ import java.util.Random;
 
 public class RaceActivity extends AppCompatActivity {
 
-    private static final int SO_LUONG_LAN = 5;
+    private static final int SO_LUONG_LAN = 4;
 
     // --- Cau hinh ---
     private static final int MAX_PROGRESS = 10000;
@@ -57,7 +57,7 @@ public class RaceActivity extends AppCompatActivity {
     private boolean isRacing = false;
     private Runnable raceRunnable;
     private Runnable cheerRunnable;
-    
+
     // Track all finishers for result screen
     private boolean[] hasFinished = new boolean[SO_LUONG_LAN];
     private int[] finishOrder = new int[SO_LUONG_LAN];
@@ -93,12 +93,12 @@ public class RaceActivity extends AppCompatActivity {
             soundManager.playClickSound();
             batDauDua();
         });
-        
-//        btnReset.setOnClickListener(v -> {
-//            soundManager.playClickSound();
-//            resetGame();
-//        });
-        
+
+        // btnReset.setOnClickListener(v -> {
+        // soundManager.playClickSound();
+        // resetGame();
+        // });
+
         btnExit.setOnClickListener(v -> {
             soundManager.playClickSound();
             // Dung cuoc dua neu dang chay
@@ -126,13 +126,12 @@ public class RaceActivity extends AppCompatActivity {
             tvBalanceInRace.setText("So du: " + currentBalance + "$");
         }
 
-        int[] sbIds = {R.id.sb1, R.id.sb2, R.id.sb3, R.id.sb4, R.id.sb5};
-        int[] ivIds = {R.id.iv1, R.id.iv2, R.id.iv3, R.id.iv4, R.id.iv5};
-        int[] cbIds = {R.id.cbBet1, R.id.cbBet2, R.id.cbBet3, R.id.cbBet4, R.id.cbBet5};
-        int[] edtIds = {R.id.edtBet1, R.id.edtBet2, R.id.edtBet3, R.id.edtBet4, R.id.edtBet5};
+        int[] sbIds = { R.id.sb1, R.id.sb2, R.id.sb3, R.id.sb4 };
+        int[] ivIds = { R.id.iv1, R.id.iv2, R.id.iv3, R.id.iv4 };
+        int[] cbIds = { R.id.cbBet1, R.id.cbBet2, R.id.cbBet3, R.id.cbBet4 };
+        int[] edtIds = { R.id.edtBet1, R.id.edtBet2, R.id.edtBet3, R.id.edtBet4 };
 
         int[] racerImageIds = {
-                R.drawable.vit6,
                 R.drawable.vit6,
                 R.drawable.vit6,
                 R.drawable.vit6,
@@ -142,46 +141,46 @@ public class RaceActivity extends AppCompatActivity {
         int gifResourceId = R.drawable.vit7;
         String stickerUrl = "https://media.tenor.com/b1ATwUD_ziAAAAAj/1.gif";
 
-//        for (int i = 0; i < SO_LUONG_LAN; i++) {
-//            sbRacers[i] = findViewById(sbIds[i]);
-//            ivRacers[i] = findViewById(ivIds[i]);
-//            cbBets[i] = findViewById(cbIds[i]);
-//            edtBets[i] = findViewById(edtIds[i]);
-//
-//            sbRacers[i].setEnabled(false);
-//            sbRacers[i].setMax(MAX_PROGRESS);
-//
-//            try {
-//                ivRacers[i].setImageResource(racerImageIds[i]);
-//            } catch (Exception e) {
-//                ivRacers[i].setImageResource(R.mipmap.ic_launcher);
-//            }
-//
-//            ivRacers[i].setTranslationX(startOffsetPx);
-//        }
+        // for (int i = 0; i < SO_LUONG_LAN; i++) {
+        // sbRacers[i] = findViewById(sbIds[i]);
+        // ivRacers[i] = findViewById(ivIds[i]);
+        // cbBets[i] = findViewById(cbIds[i]);
+        // edtBets[i] = findViewById(edtIds[i]);
+        //
+        // sbRacers[i].setEnabled(false);
+        // sbRacers[i].setMax(MAX_PROGRESS);
+        //
+        // try {
+        // ivRacers[i].setImageResource(racerImageIds[i]);
+        // } catch (Exception e) {
+        // ivRacers[i].setImageResource(R.mipmap.ic_launcher);
+        // }
+        //
+        // ivRacers[i].setTranslationX(startOffsetPx);
+        // }
 
-//        for (int i = 0; i < SO_LUONG_LAN; i++) {
-//            sbRacers[i] = findViewById(sbIds[i]);
-//            ivRacers[i] = findViewById(ivIds[i]);
-//            cbBets[i] = findViewById(cbIds[i]);
-//            edtBets[i] = findViewById(edtIds[i]);
-//
-//            sbRacers[i].setEnabled(false);
-//            sbRacers[i].setMax(MAX_PROGRESS);
-//
-//            // Sử dụng Glide để tải GIF
-//            try {
-//                Glide.with(this)
-//                        .asGif() // Bắt buộc tải dưới dạng GIF
-//                        .load(gifResourceId) // Hoặc racerGifIds[i] nếu dùng mảng
-//                        .into(ivRacers[i]);
-//            } catch (Exception e) {
-//                // Fallback nếu có lỗi, dùng ảnh tĩnh mặc định
-//                ivRacers[i].setImageResource(R.mipmap.ic_launcher);
-//            }
-//
-//            ivRacers[i].setTranslationX(startOffsetPx);
-//        }
+        // for (int i = 0; i < SO_LUONG_LAN; i++) {
+        // sbRacers[i] = findViewById(sbIds[i]);
+        // ivRacers[i] = findViewById(ivIds[i]);
+        // cbBets[i] = findViewById(cbIds[i]);
+        // edtBets[i] = findViewById(edtIds[i]);
+        //
+        // sbRacers[i].setEnabled(false);
+        // sbRacers[i].setMax(MAX_PROGRESS);
+        //
+        // // Sử dụng Glide để tải GIF
+        // try {
+        // Glide.with(this)
+        // .asGif() // Bắt buộc tải dưới dạng GIF
+        // .load(gifResourceId) // Hoặc racerGifIds[i] nếu dùng mảng
+        // .into(ivRacers[i]);
+        // } catch (Exception e) {
+        // // Fallback nếu có lỗi, dùng ảnh tĩnh mặc định
+        // ivRacers[i].setImageResource(R.mipmap.ic_launcher);
+        // }
+        //
+        // ivRacers[i].setTranslationX(startOffsetPx);
+        // }
 
         for (int i = 0; i < SO_LUONG_LAN; i++) {
             sbRacers[i] = findViewById(sbIds[i]);
@@ -198,7 +197,7 @@ public class RaceActivity extends AppCompatActivity {
                         .asGif()
                         .load(stickerUrl) // Truyền Link trực tiếp vào đây
                         .placeholder(R.mipmap.ic_launcher) // Ảnh chờ (trong lúc đang tải)
-                        .error(R.mipmap.ic_launcher)       // Ảnh lỗi (nếu mất mạng)
+                        .error(R.mipmap.ic_launcher) // Ảnh lỗi (nếu mất mạng)
                         .into(ivRacers[i]);
             } catch (Exception e) {
                 ivRacers[i].setImageResource(R.mipmap.ic_launcher);
@@ -254,9 +253,9 @@ public class RaceActivity extends AppCompatActivity {
         }
 
         balanceBeforeRace = currentBalance;
-        
+
         balanceBeforeRace = currentBalance;
-        
+
         soundManager.playBetSound();
 
         currentBalance -= tongTienCuoc;
@@ -285,11 +284,13 @@ public class RaceActivity extends AppCompatActivity {
         raceRunnable = new Runnable() {
             @Override
             public void run() {
-                if (!isRacing) return;
+                if (!isRacing)
+                    return;
 
                 for (int i = 0; i < SO_LUONG_LAN; i++) {
-                    if (hasFinished[i]) continue;
-                    
+                    if (hasFinished[i])
+                        continue;
+
                     int speed = random.nextInt(71) + 10;
                     int currentProgress = sbRacers[i].getProgress();
                     int newProgress = currentProgress + speed;
@@ -298,10 +299,10 @@ public class RaceActivity extends AppCompatActivity {
                         newProgress = MAX_PROGRESS;
                         sbRacers[i].setProgress(newProgress);
                         updatePosition(i, newProgress);
-                        
+
                         hasFinished[i] = true;
                         finishOrder[finishCount++] = i;
-                        
+
                         if (finishCount >= SO_LUONG_LAN) {
                             stopCheerLoop();
                             xuLyKetThucDua();
@@ -318,7 +319,7 @@ public class RaceActivity extends AppCompatActivity {
         };
         handler.post(raceRunnable);
     }
-    
+
     private void startCheerLoop() {
         cheerRunnable = new Runnable() {
             @Override
@@ -331,7 +332,7 @@ public class RaceActivity extends AppCompatActivity {
         };
         handler.postDelayed(cheerRunnable, CHEER_INTERVAL_MS);
     }
-    
+
     private void stopCheerLoop() {
         if (cheerRunnable != null) {
             handler.removeCallbacks(cheerRunnable);
@@ -358,16 +359,16 @@ public class RaceActivity extends AppCompatActivity {
     private void xuLyKetThucDua() {
         isRacing = false;
         handler.removeCallbacks(raceRunnable);
-        
+
         soundManager.stopBackgroundMusic();
 
         int winnerIndex = finishOrder[0];
         String winnerName = "Vit so " + (winnerIndex + 1);
         tvTitle.setText(winnerName + " CHIEN THANG!");
-        
+
         handler.postDelayed(() -> launchResultActivity(), 2000);
     }
-    
+
     private void launchResultActivity() {
         Intent intent = new Intent(RaceActivity.this, ResultActivity.class);
         intent.putExtra("rankings", finishOrder);
@@ -382,11 +383,11 @@ public class RaceActivity extends AppCompatActivity {
         isRacing = false;
         handler.removeCallbacks(raceRunnable);
         stopCheerLoop();
-        
+
         tvTitle.setText("DUCK RACE");
         btnStart.setEnabled(true);
         // btnReset.setEnabled(false);
-        
+
         for (int i = 0; i < SO_LUONG_LAN; i++) {
             sbRacers[i].setProgress(0);
             ivRacers[i].setTranslationX(startOffsetPx);
@@ -398,24 +399,24 @@ public class RaceActivity extends AppCompatActivity {
                 edtBets[i].setText("");
             }
         }
-        
+
         if (tvBalanceInRace != null) {
             tvBalanceInRace.setText("So du: " + currentBalance + "$");
         }
-        
+
         Toast.makeText(this, "Da lam moi duong dua!", Toast.LENGTH_SHORT).show();
     }
 
     private int dpToPx(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
         soundManager.onResume();
     }
-    
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -424,7 +425,7 @@ public class RaceActivity extends AppCompatActivity {
             stopCheerLoop();
         }
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
