@@ -19,6 +19,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+
 import java.util.Random;
 
 public class RaceActivity extends AppCompatActivity {
@@ -135,6 +137,50 @@ public class RaceActivity extends AppCompatActivity {
                 R.drawable.vit6
         };
 
+        int gifResourceId = R.drawable.vit7;
+        String stickerUrl = "https://media.tenor.com/b1ATwUD_ziAAAAAj/1.gif";
+
+//        for (int i = 0; i < SO_LUONG_LAN; i++) {
+//            sbRacers[i] = findViewById(sbIds[i]);
+//            ivRacers[i] = findViewById(ivIds[i]);
+//            cbBets[i] = findViewById(cbIds[i]);
+//            edtBets[i] = findViewById(edtIds[i]);
+//
+//            sbRacers[i].setEnabled(false);
+//            sbRacers[i].setMax(MAX_PROGRESS);
+//
+//            try {
+//                ivRacers[i].setImageResource(racerImageIds[i]);
+//            } catch (Exception e) {
+//                ivRacers[i].setImageResource(R.mipmap.ic_launcher);
+//            }
+//
+//            ivRacers[i].setTranslationX(startOffsetPx);
+//        }
+
+//        for (int i = 0; i < SO_LUONG_LAN; i++) {
+//            sbRacers[i] = findViewById(sbIds[i]);
+//            ivRacers[i] = findViewById(ivIds[i]);
+//            cbBets[i] = findViewById(cbIds[i]);
+//            edtBets[i] = findViewById(edtIds[i]);
+//
+//            sbRacers[i].setEnabled(false);
+//            sbRacers[i].setMax(MAX_PROGRESS);
+//
+//            // Sử dụng Glide để tải GIF
+//            try {
+//                Glide.with(this)
+//                        .asGif() // Bắt buộc tải dưới dạng GIF
+//                        .load(gifResourceId) // Hoặc racerGifIds[i] nếu dùng mảng
+//                        .into(ivRacers[i]);
+//            } catch (Exception e) {
+//                // Fallback nếu có lỗi, dùng ảnh tĩnh mặc định
+//                ivRacers[i].setImageResource(R.mipmap.ic_launcher);
+//            }
+//
+//            ivRacers[i].setTranslationX(startOffsetPx);
+//        }
+
         for (int i = 0; i < SO_LUONG_LAN; i++) {
             sbRacers[i] = findViewById(sbIds[i]);
             ivRacers[i] = findViewById(ivIds[i]);
@@ -144,8 +190,14 @@ public class RaceActivity extends AppCompatActivity {
             sbRacers[i].setEnabled(false);
             sbRacers[i].setMax(MAX_PROGRESS);
 
+            // --- SỬ DỤNG GLIDE ĐỂ LOAD TỪ URL ---
             try {
-                ivRacers[i].setImageResource(racerImageIds[i]);
+                Glide.with(this)
+                        .asGif()
+                        .load(stickerUrl) // Truyền Link trực tiếp vào đây
+                        .placeholder(R.mipmap.ic_launcher) // Ảnh chờ (trong lúc đang tải)
+                        .error(R.mipmap.ic_launcher)       // Ảnh lỗi (nếu mất mạng)
+                        .into(ivRacers[i]);
             } catch (Exception e) {
                 ivRacers[i].setImageResource(R.mipmap.ic_launcher);
             }

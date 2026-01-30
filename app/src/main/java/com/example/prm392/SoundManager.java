@@ -28,7 +28,7 @@ public class SoundManager {
     private int currentBgmResId = 0;
 
     private float sfxVolume = 1.0f;
-    private float bgmVolume = 0.6f;
+    private float bgmVolume = 1.0f;
 
     private SoundManager(Context context) {
         this.context = context.getApplicationContext();
