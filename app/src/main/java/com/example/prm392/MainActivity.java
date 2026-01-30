@@ -19,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvPlayerName, tvBalance;
-    private Button btnTopup, btnStartBet, btnTutorial;
+    private Button btnTopup, btnStartBet, btnTutorial, btnLogout;
     private SharedPreferences sharedPreferences;
     private String currentUsername;
     private SoundManager soundManager;
@@ -69,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
             startActivity(intent);
         });
+
+        btnLogout.setOnClickListener(v -> {
+            soundManager.playClickSound();
+            showLogoutDialog();
+        });
     }
 
     private void initViews() {
@@ -76,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
         tvBalance = findViewById(R.id.tvBalance);
         btnTopup = findViewById(R.id.btnTopup);
         btnStartBet = findViewById(R.id.btnStartBet);
-        // 3. Ánh xạ nút Tutorial (Bạn cần thêm Button có id này vào activity_main.xml)
         btnTutorial = findViewById(R.id.btnTutorial);
+        btnLogout = findViewById(R.id.btnLogout);
     }
 
     private void updateBalanceDisplay() {
@@ -125,6 +130,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn có chắc chắn muốn đăng xuất?")
+                .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                    soundManager.playClickSound();
+                    // Clear current session
+                    Toast.makeText(this, "Đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                    // Return to login screen
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Hủy", (dialog, which) -> {
+                    soundManager.playClickSound();
+                    dialog.dismiss();
+                })
+                .show();
     }
 
     @Override
